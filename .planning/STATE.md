@@ -11,17 +11,17 @@ See: .planning/PROJECT.md (updated 2025-01-18)
 ## Current Position
 
 Phase: 3 of 4 (PDF Integration)
-Plan: 2 of 3 complete
-Status: In progress
-Last activity: 2026-01-18 — Completed 03-02-PLAN.md (PDF Text Extraction)
+Plan: 3 of 3 complete
+Status: Phase complete
+Last activity: 2026-01-18 — Completed 03-03-PLAN.md (TOC Extraction & Section Management)
 
-Progress: [██████░░░░] 60%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 4 min
+- Total plans completed: 7
+- Average duration: 3.4 min
 - Total execution time: 0.4 hours
 
 **By Phase:**
@@ -30,11 +30,11 @@ Progress: [██████░░░░] 60%
 |-------|-------|-------|----------|
 | 01-project-foundation | 2/2 | 10 min | 5 min |
 | 02-core-rsvp-engine | 2/2 | 9 min | 4.5 min |
-| 03-pdf-integration | 2/3 | 6 min | 3 min |
+| 03-pdf-integration | 3/3 | 8 min | 2.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (3m), 02-02 (6m), 03-01 (3m), 03-02 (3m)
-- Trend: Excellent velocity, consistently 3 minutes per plan in Phase 3
+- Last 5 plans: 02-02 (6m), 03-01 (3m), 03-02 (3m), 03-03 (2m)
+- Trend: Accelerating velocity, Phase 3 average 2.7 minutes per plan
 
 *Updated after each plan completion*
 
@@ -71,6 +71,11 @@ Recent decisions affecting current work:
 - usePDFExtraction hook orchestrates extraction → word grouping → RSVP initialization chain (03-02)
 - Document store created to persist PDF metadata for Plan 03-03 TOC navigation (03-02)
 - Dual input UI preserves manual text input alongside PDF upload for flexibility (03-02)
+- Dual-strategy TOC extraction: structured outline first (~30% success), font heuristics fallback (03-03)
+- Font heuristic filters: fontSize > 1.3x avg, 3-100 chars, alphanumeric, not all uppercase (03-03)
+- Hierarchy level estimation via font size ratio for TOC structure inference (03-03)
+- Section extraction via synchronous string splitting (no PDF re-parsing needed) (03-03)
+- Memory cleanup with page.cleanup() during font heuristic scanning (03-03)
 
 ### Pending Todos
 
@@ -81,16 +86,16 @@ None yet.
 **Phase 3 (PDF Integration):**
 - ✓ Web Worker architecture established in 03-01 (foundational, non-blocking)
 - ✓ Lazy page loading with memory cleanup implemented in 03-02 (memory management proven effective)
-- TOC extraction reliability concern - only ~30% of PDFs have proper bookmarks, fallback heuristics needed (03-03)
+- ✓ TOC extraction with dual-strategy approach completed in 03-03 (structured outline + font heuristics)
 
 ## Session Continuity
 
 Last session: 2026-01-18 (plan execution)
-Stopped at: Completed 03-02-PLAN.md - PDF Text Extraction with lazy page loading and RSVP integration
+Stopped at: Completed 03-03-PLAN.md - TOC Extraction & Section Management
 Resume file: None
 
 **Phase 1 Complete:** Foundation established with Next.js 16, shadcn/ui, PDF.js worker configuration, and Vercel deployment.
 
 **Phase 2 Complete:** Core RSVP engine with RAF timing, ORP calculator, word grouping, Zustand stores, and complete UI (display with ORP highlighting, play/pause controls, WPM/grouping sliders). Working RSVP reader with sample text and custom text input.
 
-**Phase 3 In Progress:** Plans 03-01 and 03-02 complete. Full PDF extraction working with lazy page loading, memory cleanup, and RSVP integration. End-to-end flow functional: PDF upload → text extraction → RSVP reading. Document store populated for Plan 03-03 (TOC navigation).
+**Phase 3 Complete:** PDF Integration complete with Web Worker architecture, lazy page loading, full text extraction, TOC extraction (structured + font heuristics), document store with section management, and RSVP integration. End-to-end flow: PDF upload → text extraction → RSVP reading. TOC data layer ready for navigation UI (Phase 4).
