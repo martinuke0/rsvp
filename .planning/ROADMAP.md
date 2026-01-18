@@ -44,7 +44,7 @@ Plans:
 
 **Depends on**: Phase 1
 
-**Requirements**: RSVP-01, RSVP-02, RSVP-03, RSVP-04, RSVP-05, RSVP-06, RSVP-07, RSVP-08, RSVP-09, UI-01, UI-02
+**Requirements**: RSVP-01, RSVP-02, RSVP-03, RSVP-04, RSVP-05, RSVP-06, RSVP-07, RSVP-08, UI-01, UI-02
 
 **Success Criteria** (what must be TRUE):
   1. User sees words displayed in configurable groups (1-N words) at screen center
@@ -53,12 +53,13 @@ Plans:
   4. User can change word group size during active reading session
   5. Display maintains 60fps at all WPM settings using RAF-based timing
 
-**Plans**: TBD (2-3 plans estimated)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD during planning
+- [ ] 02-01-PLAN.md — Core engine (RAF timing, ORP calculator, word grouper, Zustand stores)
+- [ ] 02-02-PLAN.md — RSVP display components (RSVPDisplay, controls, settings panel, integration)
 
-**Note**: User requested frontend-design skill for UI component implementation.
+**Note**: User requested frontend-design skill for UI component implementation. RSVP-09 (variable speed by word length) deferred as optional enhancement per research.
 
 ---
 
@@ -114,7 +115,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Foundation | 2/2 | Complete | 2025-01-18 |
-| 2. Core RSVP Engine | 0/TBD | Not started | - |
+| 2. Core RSVP Engine | 0/2 | Not started | - |
 | 3. PDF Integration | 0/TBD | Not started | - |
 | 4. Controls & Polish | 0/TBD | Not started | - |
 
