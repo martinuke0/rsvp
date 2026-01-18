@@ -11,18 +11,18 @@ See: .planning/PROJECT.md (updated 2025-01-18)
 ## Current Position
 
 Phase: 3 of 4 (PDF Integration)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-18 — Completed 03-01-PLAN.md (PDF Upload Infrastructure)
+Last activity: 2026-01-18 — Completed 03-02-PLAN.md (PDF Text Extraction)
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 4.4 min
-- Total execution time: 0.37 hours
+- Total plans completed: 6
+- Average duration: 4 min
+- Total execution time: 0.4 hours
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 01-project-foundation | 2/2 | 10 min | 5 min |
 | 02-core-rsvp-engine | 2/2 | 9 min | 4.5 min |
-| 03-pdf-integration | 1/3 | 3 min | 3 min |
+| 03-pdf-integration | 2/3 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (4m), 02-01 (3m), 02-02 (6m), 03-01 (3m)
-- Trend: Consistent velocity, averaging 3-5 minutes per plan
+- Last 5 plans: 02-01 (3m), 02-02 (6m), 03-01 (3m), 03-02 (3m)
+- Trend: Excellent velocity, consistently 3 minutes per plan in Phase 3
 
 *Updated after each plan completion*
 
@@ -67,6 +67,10 @@ Recent decisions affecting current work:
 - Two-worker architecture: extraction worker orchestrates PDF.js internal worker (03-01)
 - Transferable objects for ArrayBuffer transfer for zero-copy performance (03-01)
 - 30-second timeout for PDF extraction with automatic cleanup (03-01)
+- Sequential lazy page loading with page.cleanup() prevents memory accumulation for 50MB files (03-02)
+- usePDFExtraction hook orchestrates extraction → word grouping → RSVP initialization chain (03-02)
+- Document store created to persist PDF metadata for Plan 03-03 TOC navigation (03-02)
+- Dual input UI preserves manual text input alongside PDF upload for flexibility (03-02)
 
 ### Pending Todos
 
@@ -76,17 +80,17 @@ None yet.
 
 **Phase 3 (PDF Integration):**
 - ✓ Web Worker architecture established in 03-01 (foundational, non-blocking)
-- Lazy page loading for 50MB files needs implementation in 03-02 (memory management critical)
+- ✓ Lazy page loading with memory cleanup implemented in 03-02 (memory management proven effective)
 - TOC extraction reliability concern - only ~30% of PDFs have proper bookmarks, fallback heuristics needed (03-03)
 
 ## Session Continuity
 
 Last session: 2026-01-18 (plan execution)
-Stopped at: Completed 03-01-PLAN.md - PDF Upload Infrastructure with Web Worker architecture
+Stopped at: Completed 03-02-PLAN.md - PDF Text Extraction with lazy page loading and RSVP integration
 Resume file: None
 
 **Phase 1 Complete:** Foundation established with Next.js 16, shadcn/ui, PDF.js worker configuration, and Vercel deployment.
 
 **Phase 2 Complete:** Core RSVP engine with RAF timing, ORP calculator, word grouping, Zustand stores, and complete UI (display with ORP highlighting, play/pause controls, WPM/grouping sliders). Working RSVP reader with sample text and custom text input.
 
-**Phase 3 In Progress:** Plan 03-01 complete - Web Worker infrastructure for non-blocking PDF processing, drag-and-drop upload UI, file validation (≤50MB), progress tracking. Ready for Plan 03-02 (text extraction with lazy page loading).
+**Phase 3 In Progress:** Plans 03-01 and 03-02 complete. Full PDF extraction working with lazy page loading, memory cleanup, and RSVP integration. End-to-end flow functional: PDF upload → text extraction → RSVP reading. Document store populated for Plan 03-03 (TOC navigation).
