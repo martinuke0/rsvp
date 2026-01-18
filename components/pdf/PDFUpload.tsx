@@ -16,53 +16,26 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
-import { Upload, AlertCircle } from 'lucide-react'
-import { PDFProcessor } from '@/lib/pdf/pdf-processor'
-import type { PDFExtractionResult } from '@/types/pdf-worker'
+import { Upload } from 'lucide-react'
 
 interface PDFUploadProps {
-  onUploadComplete: (result: PDFExtractionResult) => void
+  onFileSelected: (file: File) => void
 }
 
-export default function PDFUpload({ onUploadComplete }: PDFUploadProps) {
-  // Component state
-  const [isUploading, setIsUploading] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [error, setError] = useState<string | null>(null)
+export default function PDFUpload({ onFileSelected }: PDFUploadProps) {
+  // Component state (simplified - extraction handled by parent hook)
   const [isDragOver, setIsDragOver] = useState(false)
 
   // Hidden file input ref for click-to-browse
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   /**
-   * Process PDF file using worker
+   * Handle file selection (no extraction here - delegated to parent)
    */
-  const processFile = useCallback(async (file: File) => {
-    setIsUploading(true)
-    setProgress(0)
-    setError(null)
-
-    try {
-      // Create processor with progress callback
-      const processor = new PDFProcessor({
-        onProgress: (p) => setProgress(p)
-      })
-
-      // Extract text via worker (non-blocking)
-      const result = await processor.extractText(file)
-
-      // Success - notify parent component
-      onUploadComplete(result)
-    } catch (err) {
-      // Handle extraction errors
-      const errorMessage = err instanceof Error ? err.message : 'Failed to process PDF'
-      setError(errorMessage)
-    } finally {
-      setIsUploading(false)
-    }
-  }, [onUploadComplete])
+  const handleFileSelected = useCallback((file: File) => {
+    // Notify parent component to handle extraction
+    onFileSelected(file)
+  }, [onFileSelected])
 
   /**
    * Handle file drop
@@ -74,9 +47,9 @@ export default function PDFUpload({ onUploadComplete }: PDFUploadProps) {
     // Get first file from drop
     const file = e.dataTransfer.files[0]
     if (file) {
-      processFile(file)
+      handleFileSelected(file)
     }
-  }, [processFile])
+  }, [handleFileSelected])
 
   /**
    * Handle drag over (required to enable drop)
@@ -106,53 +79,11 @@ export default function PDFUpload({ onUploadComplete }: PDFUploadProps) {
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      processFile(file)
+      handleFileSelected(file)
     }
-  }, [processFile])
+  }, [handleFileSelected])
 
-  /**
-   * Handle retry after error
-   */
-  const handleRetry = useCallback(() => {
-    setError(null)
-    setProgress(0)
-  }, [])
-
-  // Render: Uploading state
-  if (isUploading) {
-    return (
-      <Card className="p-8 border-2 border-dashed">
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="w-full max-w-xs">
-            <Progress value={progress} />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Processing PDF... {Math.round(progress)}%
-          </p>
-        </div>
-      </Card>
-    )
-  }
-
-  // Render: Error state
-  if (error) {
-    return (
-      <Card className="p-8 border-2 border-red-500">
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <AlertCircle className="h-12 w-12 text-red-500" />
-          <div className="text-center">
-            <p className="text-sm font-semibold text-red-500 mb-2">Error Processing PDF</p>
-            <p className="text-sm text-muted-foreground">{error}</p>
-          </div>
-          <Button variant="outline" onClick={handleRetry}>
-            Try Again
-          </Button>
-        </div>
-      </Card>
-    )
-  }
-
-  // Render: Idle state (drag-and-drop zone)
+  // Render: Drag-and-drop zone (extraction state managed by parent)
   return (
     <>
       <Card
