@@ -84,6 +84,13 @@ export default function Home() {
     // Store section info
     doc.setSection(item.pageIndex + 1, endPage);
 
+    // Check for saved position
+    const savedIndex = useReadingStore.getState().restorePosition();
+    if (savedIndex !== null && savedIndex < groupedWords.length) {
+      // Restore position
+      useReadingStore.getState().setCurrentWord(groupedWords[savedIndex], savedIndex);
+    }
+
     // Switch to reading view
     setView('reading');
   }, [wordsPerGroup, initialize]);
@@ -105,6 +112,13 @@ export default function Home() {
     // Store section info
     doc.setSection(start, end);
 
+    // Check for saved position
+    const savedIndex = useReadingStore.getState().restorePosition();
+    if (savedIndex !== null && savedIndex < groupedWords.length) {
+      // Restore position
+      useReadingStore.getState().setCurrentWord(groupedWords[savedIndex], savedIndex);
+    }
+
     // Switch to reading view
     setView('reading');
   }, [wordsPerGroup, initialize]);
@@ -123,6 +137,13 @@ export default function Home() {
     // Store section info (full document)
     doc.setSection(1, doc.pageCount);
 
+    // Check for saved position
+    const savedIndex = useReadingStore.getState().restorePosition();
+    if (savedIndex !== null && savedIndex < groupedWords.length) {
+      // Restore position
+      useReadingStore.getState().setCurrentWord(groupedWords[savedIndex], savedIndex);
+    }
+
     // Switch to reading view
     setView('reading');
   }, [wordsPerGroup, initialize]);
@@ -135,6 +156,11 @@ export default function Home() {
     const doc = useDocumentStore.getState();
 
     if (doc.filename) {
+      // Save position before pausing
+      if (doc.currentSection) {
+        useReadingStore.getState().savePosition(doc.filename, doc.currentSection);
+      }
+
       // Pause RSVP playback (preserve current position)
       useReadingStore.getState().setIsPlaying(false);
 
@@ -208,6 +234,29 @@ export default function Home() {
   useEffect(() => {
     handleLoadText();
   }, [handleLoadText]);
+
+  /**
+   * Periodic auto-save during playback
+   * Saves position every 5 seconds to prevent loss on browser crash
+   */
+  useEffect(() => {
+    const reading = useReadingStore.getState();
+    const doc = useDocumentStore.getState();
+
+    // Only save if actively reading a document section
+    if (reading.isPlaying && doc.filename && doc.currentSection) {
+      // Auto-save every 5 seconds during playback
+      const interval = setInterval(() => {
+        const currentReading = useReadingStore.getState();
+        const currentDoc = useDocumentStore.getState();
+        if (currentReading.isPlaying && currentDoc.filename && currentDoc.currentSection) {
+          currentReading.savePosition(currentDoc.filename, currentDoc.currentSection);
+        }
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [view]); // Re-run when view changes to capture isPlaying state
 
   return (
     <main className="min-h-screen p-8">
