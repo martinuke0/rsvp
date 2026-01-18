@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
 
 const SAMPLE_TEXT = `Rapid Serial Visual Presentation (RSVP) is a technique for displaying text in which words are presented one at a time at a specific location on the screen. This method eliminates eye movement and enables reading speeds of 300-1000 words per minute while maintaining comprehension. The key to effective RSVP is the Optimal Recognition Point (ORP), positioned at approximately 30-40% from the start of each word, which aligns with natural eye fixation patterns discovered through eye-tracking research.`;
 
@@ -127,6 +127,22 @@ export default function Home() {
     setView('reading');
   }, [wordsPerGroup, initialize]);
 
+  /**
+   * Handle back to navigation
+   * Returns to navigation view, pauses RSVP, preserves reading position
+   */
+  const handleBackToNavigation = useCallback(() => {
+    const doc = useDocumentStore.getState();
+
+    if (doc.filename) {
+      // Pause RSVP playback (preserve current position)
+      useReadingStore.getState().setIsPlaying(false);
+
+      // Return to navigation view (document state preserved)
+      setView('navigation');
+    }
+  }, []);
+
   // Auto-load sample text on mount
   useEffect(() => {
     handleLoadText();
@@ -147,18 +163,37 @@ export default function Home() {
 
         {/* View: Reading interface */}
         {view === 'reading' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left column: RSVP Display and Controls */}
-            <div className="lg:col-span-2 space-y-6">
-              <RSVPDisplay />
-              <div className="flex justify-center">
-                <RSVPControls />
-              </div>
-            </div>
+          <div className="space-y-6">
+            {/* Back to navigation button (PDF documents only) */}
+            {useDocumentStore.getState().filename && (
+              <Card>
+                <CardContent className="pt-6">
+                  <Button
+                    onClick={handleBackToNavigation}
+                    variant="secondary"
+                    className="w-full"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Navigation
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
 
-            {/* Right column: Settings */}
-            <div>
-              <SettingsPanel />
+            {/* RSVP Display and Controls */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left column: RSVP Display and Controls */}
+              <div className="lg:col-span-2 space-y-6">
+                <RSVPDisplay />
+                <div className="flex justify-center">
+                  <RSVPControls />
+                </div>
+              </div>
+
+              {/* Right column: Settings */}
+              <div>
+                <SettingsPanel />
+              </div>
             </div>
           </div>
         )}
