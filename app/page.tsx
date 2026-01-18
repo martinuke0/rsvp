@@ -19,13 +19,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
-import { AlertCircle, ArrowLeft } from 'lucide-react';
-
-const SAMPLE_TEXT = `Rapid Serial Visual Presentation (RSVP) is a technique for displaying text in which words are presented one at a time at a specific location on the screen. This method eliminates eye movement and enables reading speeds of 300-1000 words per minute while maintaining comprehension. The key to effective RSVP is the Optimal Recognition Point (ORP), positioned at approximately 30-40% from the start of each word, which aligns with natural eye fixation patterns discovered through eye-tracking research.`;
+import { AlertCircle, ArrowLeft, FileText, Upload as UploadIcon } from 'lucide-react';
 
 export default function Home() {
-  const [text, setText] = useState(SAMPLE_TEXT);
-  const [view, setView] = useState<'upload' | 'navigation' | 'reading'>('upload');
+  const [text, setText] = useState('');
+  const [view, setView] = useState<'landing' | 'upload' | 'navigation' | 'reading'>('landing');
   const initialize = useReadingStore((state) => state.initialize);
   const reset = useReadingStore((state) => state.reset);
   const wordsPerGroup = useSettingsStore((state) => state.wordsPerGroup);
@@ -37,13 +35,15 @@ export default function Home() {
     if (text.trim()) {
       const grouped = groupWords(text, wordsPerGroup);
       initialize(grouped);
+      setView('reading');
     }
   }, [text, wordsPerGroup, initialize]);
 
   const handleReset = useCallback(() => {
     reset();
     useDocumentStore.getState().clear();
-    setText(SAMPLE_TEXT);
+    setText('');
+    setView('landing');
   }, [reset]);
 
   /**
@@ -51,9 +51,14 @@ export default function Home() {
    * After extraction, show navigation view
    */
   const handlePDFUpload = useCallback(async (file: File) => {
-    await extractPDF(file, wordsPerGroup);
-    // After extraction completes, show navigation view
-    setView('navigation');
+    try {
+      await extractPDF(file, wordsPerGroup);
+      // After extraction completes, show navigation view
+      setView('navigation');
+    } catch (err) {
+      // Error is already handled by usePDFExtraction hook
+      console.error('PDF extraction failed:', err);
+    }
   }, [extractPDF, wordsPerGroup]);
 
   /**
@@ -246,11 +251,6 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [view, handleBackToNavigation, handleRestart]);
 
-  // Auto-load sample text on mount
-  useEffect(() => {
-    handleLoadText();
-  }, [handleLoadText]);
-
   /**
    * Periodic auto-save during playback
    * Saves position every 5 seconds to prevent loss on browser crash
@@ -286,6 +286,45 @@ export default function Home() {
             Read faster with precision.
           </p>
         </div>
+
+        {/* View: Landing page */}
+        {view === 'landing' && (
+          <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
+            <div className="text-center space-y-4 max-w-2xl">
+              <p className="text-lg text-muted-foreground">
+                Choose how you want to start reading
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+              {/* Upload PDF Card */}
+              <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => setView('upload')}>
+                <CardContent className="flex flex-col items-center justify-center p-12 space-y-4">
+                  <UploadIcon className="h-16 w-16 text-muted-foreground" />
+                  <div className="text-center space-y-2">
+                    <h3 className="text-2xl font-semibold">Upload PDF</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Extract text from PDF files up to 50MB
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Paste Text Card */}
+              <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => setView('upload')}>
+                <CardContent className="flex flex-col items-center justify-center p-12 space-y-4">
+                  <FileText className="h-16 w-16 text-muted-foreground" />
+                  <div className="text-center space-y-2">
+                    <h3 className="text-2xl font-semibold">Paste Text</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Start reading from any text content
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
 
         {/* View: Reading interface */}
         {view === 'reading' && (
