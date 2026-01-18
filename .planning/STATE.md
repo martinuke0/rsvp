@@ -11,18 +11,18 @@ See: .planning/PROJECT.md (updated 2025-01-18)
 ## Current Position
 
 Phase: 4 of 4 (Controls & Polish)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-18 — Completed 04-01-PLAN.md (Keyboard Shortcuts & Restart)
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-18 — Completed 04-02-PLAN.md (Position Persistence & Progress Tracking)
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 2.78 min
-- Total execution time: 0.42 hours
+- Total plans completed: 10
+- Average duration: 2.8 min
+- Total execution time: 0.47 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [█████████░] 90%
 | 01-project-foundation | 2/2 | 10 min | 5 min |
 | 02-core-rsvp-engine | 2/2 | 9 min | 4.5 min |
 | 03-pdf-integration | 4/4 | 11 min | 2.75 min |
-| 04-controls-and-polish | 1/2 | 1 min | 1 min |
+| 04-controls-and-polish | 2/2 | 4 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (3m), 03-03 (2m), 03-04 (3m), 04-01 (1m)
-- Trend: Peak efficiency, Phase 4 Plan 1 completed in 1 minute
+- Last 5 plans: 03-03 (2m), 03-04 (3m), 04-01 (1m), 04-02 (3m)
+- Trend: Sustained high velocity, all Phase 4 plans sub-3 minutes
 
 *Updated after each plan completion*
 
@@ -86,6 +86,11 @@ Recent decisions affecting current work:
 - Input field guard prevents shortcuts while typing (instanceof checks) (04-01)
 - Event listener cleanup in useEffect return prevents memory leak (04-01)
 - Escape only returns to navigation when view === 'reading' (04-01)
+- Composite key matching (filename + section range) prevents wrong position restore (04-02)
+- partialize limits persistence to savedPosition only (not runtime state) (04-02)
+- Dynamic require prevents circular dependency with document-store (04-02)
+- 5-second auto-save interval balances performance and data safety (04-02)
+- Progress bar with time estimate uses WPM for remaining time calculation (04-02)
 
 ### Pending Todos
 
@@ -101,11 +106,14 @@ None yet.
 
 **Phase 4 (Controls & Polish):**
 - ✓ Keyboard shortcuts (Space, Escape, R) with restart button implemented in 04-01 (hands-free control complete)
+- ✓ Position persistence with composite key matching implemented in 04-02 (reading position preserved across sessions)
+- ✓ Visual progress bar with time estimate implemented in 04-02 (progress awareness complete)
+- ✓ Auto-save during playback implemented in 04-02 (data safety ensured)
 
 ## Session Continuity
 
 Last session: 2026-01-18 (plan execution)
-Stopped at: Completed 04-01-PLAN.md - Keyboard Shortcuts & Restart
+Stopped at: Completed 04-02-PLAN.md - Position Persistence & Progress Tracking
 Resume file: None
 
 **Phase 1 Complete:** Foundation established with Next.js 16, shadcn/ui, PDF.js worker configuration, and Vercel deployment.
@@ -114,4 +122,6 @@ Resume file: None
 
 **Phase 3 Complete:** PDF Integration fully operational with Web Worker architecture, lazy page loading, full text extraction, TOC extraction (structured + font heuristics), document store with section management, hierarchical navigation UI (TOC + page range selector), back navigation preserving state, and complete RSVP integration. End-to-end flow: PDF upload → navigation (TOC or page range) → section reading → back to navigation → different section. Manual text input flow preserved alongside PDF workflow.
 
-**Phase 4 In Progress:** Keyboard shortcuts (Space, Escape, R) and restart button complete. Next: Position persistence and progress tracking (04-02).
+**Phase 4 Complete:** Controls and polish fully implemented. Keyboard shortcuts (Space, Escape, R) for hands-free control, restart button, position persistence with composite key matching (filename + section range), visual progress bar with time estimate, auto-save on pause and periodic save every 5 seconds, position restore on section load with boundary validation. Settings persistence (WPM, word grouping) verified from Phase 2 implementation.
+
+**All v1 Requirements Complete:** Application ready for production deployment, testing, and user acceptance.
