@@ -11,18 +11,18 @@ See: .planning/PROJECT.md (updated 2025-01-18)
 ## Current Position
 
 Phase: 3 of 4 (PDF Integration)
-Plan: 3 of 3 complete
+Plan: 4 of 4 complete
 Status: Phase complete
-Last activity: 2026-01-18 — Completed 03-03-PLAN.md (TOC Extraction & Section Management)
+Last activity: 2026-01-18 — Completed 03-04-PLAN.md (Navigation UI)
 
-Progress: [███████░░░] 70%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 3.4 min
-- Total execution time: 0.4 hours
+- Total plans completed: 8
+- Average duration: 3.25 min
+- Total execution time: 0.43 hours
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [███████░░░] 70%
 |-------|-------|-------|----------|
 | 01-project-foundation | 2/2 | 10 min | 5 min |
 | 02-core-rsvp-engine | 2/2 | 9 min | 4.5 min |
-| 03-pdf-integration | 3/3 | 8 min | 2.7 min |
+| 03-pdf-integration | 4/4 | 11 min | 2.75 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (6m), 03-01 (3m), 03-02 (3m), 03-03 (2m)
-- Trend: Accelerating velocity, Phase 3 average 2.7 minutes per plan
+- Last 5 plans: 03-01 (3m), 03-02 (3m), 03-03 (2m), 03-04 (3m)
+- Trend: Accelerating velocity, Phase 3 average 2.75 minutes per plan
 
 *Updated after each plan completion*
 
@@ -76,6 +76,11 @@ Recent decisions affecting current work:
 - Hierarchy level estimation via font size ratio for TOC structure inference (03-03)
 - Section extraction via synchronous string splitting (no PDF re-parsing needed) (03-03)
 - Memory cleanup with page.cleanup() during font heuristic scanning (03-03)
+- Three-view state machine: upload → navigation → reading for clear separation of concerns (03-04)
+- Back button preserves reading position within current section (pause without reset) (03-04)
+- Navigation handlers use getState() for one-time reads (no subscriptions needed) (03-04)
+- TOC end page calculated from next item in outline array (natural section boundaries) (03-04)
+- Full document reading preserved alongside section selection for flexibility (03-04)
 
 ### Pending Todos
 
@@ -87,15 +92,16 @@ None yet.
 - ✓ Web Worker architecture established in 03-01 (foundational, non-blocking)
 - ✓ Lazy page loading with memory cleanup implemented in 03-02 (memory management proven effective)
 - ✓ TOC extraction with dual-strategy approach completed in 03-03 (structured outline + font heuristics)
+- ✓ Navigation UI completed in 03-04 (TOC hierarchy, page range selector, back navigation)
 
 ## Session Continuity
 
 Last session: 2026-01-18 (plan execution)
-Stopped at: Completed 03-03-PLAN.md - TOC Extraction & Section Management
+Stopped at: Completed 03-04-PLAN.md - Navigation UI
 Resume file: None
 
 **Phase 1 Complete:** Foundation established with Next.js 16, shadcn/ui, PDF.js worker configuration, and Vercel deployment.
 
 **Phase 2 Complete:** Core RSVP engine with RAF timing, ORP calculator, word grouping, Zustand stores, and complete UI (display with ORP highlighting, play/pause controls, WPM/grouping sliders). Working RSVP reader with sample text and custom text input.
 
-**Phase 3 Complete:** PDF Integration complete with Web Worker architecture, lazy page loading, full text extraction, TOC extraction (structured + font heuristics), document store with section management, and RSVP integration. End-to-end flow: PDF upload → text extraction → RSVP reading. TOC data layer ready for navigation UI (Phase 4).
+**Phase 3 Complete:** PDF Integration fully operational with Web Worker architecture, lazy page loading, full text extraction, TOC extraction (structured + font heuristics), document store with section management, hierarchical navigation UI (TOC + page range selector), back navigation preserving state, and complete RSVP integration. End-to-end flow: PDF upload → navigation (TOC or page range) → section reading → back to navigation → different section. Manual text input flow preserved alongside PDF workflow.
