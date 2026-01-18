@@ -12,7 +12,7 @@ This roadmap transforms a blank repository into a production RSVP speed reading 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Project Foundation** - Next.js setup, shadcn UI, deployment pipeline
+- [x] **Phase 1: Project Foundation** - Next.js setup, shadcn UI, deployment pipeline
 - [ ] **Phase 2: Core RSVP Engine** - Timing loop, focal point, word grouping, speed control
 - [ ] **Phase 3: PDF Integration** - Upload, text extraction, TOC navigation, Web Worker architecture
 - [ ] **Phase 4: Controls & Polish** - Reading controls, settings persistence, keyboard shortcuts, progress tracking
@@ -34,8 +34,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Next.js initialization, shadcn/ui Stone theme, minimal UI structure
-- [ ] 01-02-PLAN.md — PDF.js worker configuration, Vercel deployment, production validation
+- [x] 01-01-PLAN.md — Next.js initialization, shadcn/ui Stone theme, minimal UI structure
+- [x] 01-02-PLAN.md — PDF.js worker configuration, Vercel deployment, production validation
 
 ---
 
@@ -113,7 +113,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Project Foundation | 0/2 | Ready to execute | - |
+| 1. Project Foundation | 2/2 | Complete | 2025-01-18 |
 | 2. Core RSVP Engine | 0/TBD | Not started | - |
 | 3. PDF Integration | 0/TBD | Not started | - |
 | 4. Controls & Polish | 0/TBD | Not started | - |
