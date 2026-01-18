@@ -13,7 +13,7 @@ This roadmap transforms a blank repository into a production RSVP speed reading 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Project Foundation** - Next.js setup, shadcn UI, deployment pipeline
-- [ ] **Phase 2: Core RSVP Engine** - Timing loop, focal point, word grouping, speed control
+- [x] **Phase 2: Core RSVP Engine** - Timing loop, focal point, word grouping, speed control
 - [ ] **Phase 3: PDF Integration** - Upload, text extraction, TOC navigation, Web Worker architecture
 - [ ] **Phase 4: Controls & Polish** - Reading controls, settings persistence, keyboard shortcuts, progress tracking
 
@@ -56,8 +56,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Core engine (RAF timing, ORP calculator, word grouper, Zustand stores)
-- [ ] 02-02-PLAN.md — RSVP display components (RSVPDisplay, controls, settings panel, integration)
+- [x] 02-01-PLAN.md — Core engine (RAF timing, ORP calculator, word grouper, Zustand stores)
+- [x] 02-02-PLAN.md — RSVP display components (RSVPDisplay, controls, settings panel, integration)
 
 **Note**: User requested frontend-design skill for UI component implementation. RSVP-09 (variable speed by word length) deferred as optional enhancement per research.
 
@@ -78,10 +78,12 @@ Plans:
   5. User can return to TOC/section selection after completing reading session
   6. Application remains responsive during PDF processing using Web Worker architecture
 
-**Plans**: TBD (2-3 plans estimated)
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: TBD during planning
+- [ ] 03-01-PLAN.md — Web Worker infrastructure, PDF upload UI, progress tracking
+- [ ] 03-02-PLAN.md — Text extraction with lazy page loading, RSVP integration
+- [ ] 03-03-PLAN.md — TOC extraction (outline + heuristics), navigation UI, page range selection
 
 ---
 
@@ -115,8 +117,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Foundation | 2/2 | Complete | 2025-01-18 |
-| 2. Core RSVP Engine | 0/2 | Not started | - |
-| 3. PDF Integration | 0/TBD | Not started | - |
+| 2. Core RSVP Engine | 2/2 | Complete | 2025-01-18 |
+| 3. PDF Integration | 0/3 | Not started | - |
 | 4. Controls & Polish | 0/TBD | Not started | - |
 
 ---
