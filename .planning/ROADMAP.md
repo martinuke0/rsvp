@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Project Foundation** - Next.js setup, shadcn UI, deployment pipeline
 - [x] **Phase 2: Core RSVP Engine** - Timing loop, focal point, word grouping, speed control
-- [ ] **Phase 3: PDF Integration** - Upload, text extraction, TOC navigation, Web Worker architecture
+- [x] **Phase 3: PDF Integration** - Upload, text extraction, TOC navigation, Web Worker architecture
 - [ ] **Phase 4: Controls & Polish** - Reading controls, settings persistence, keyboard shortcuts, progress tracking
 
 ## Phase Details
@@ -78,12 +78,13 @@ Plans:
   5. User can return to TOC/section selection after completing reading session
   6. Application remains responsive during PDF processing using Web Worker architecture
 
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Web Worker infrastructure, PDF upload UI, progress tracking
-- [ ] 03-02-PLAN.md — Text extraction with lazy page loading, RSVP integration
-- [ ] 03-03-PLAN.md — TOC extraction (outline + heuristics), navigation UI, page range selection
+- [x] 03-01-PLAN.md — Web Worker infrastructure, PDF upload UI, progress tracking
+- [x] 03-02-PLAN.md — Text extraction with lazy page loading, RSVP integration
+- [x] 03-03-PLAN.md — TOC extraction (outline + heuristics), section management
+- [x] 03-04-PLAN.md — Navigation UI (TOC + page range selector), back button
 
 ---
 
@@ -97,15 +98,16 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User can pause and resume reading from exact position
   2. User can restart current section from beginning
-  3. User can control reading with keyboard shortcuts (space, arrows, escape)
+  3. User can control reading with keyboard shortcuts (space, escape, R)
   4. User sees progress bar showing position in current section
   5. Reading position persists across browser sessions (returns to last position on reload)
   6. Settings (speed, word grouping, preferences) persist across sessions
 
-**Plans**: TBD (1-2 plans estimated)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD during planning
+- [ ] 04-01-PLAN.md — Keyboard shortcuts (Space/Escape/R), restart button
+- [ ] 04-02-PLAN.md — Position persistence, progress bar with time estimate
 
 ---
 
@@ -118,10 +120,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Project Foundation | 2/2 | Complete | 2025-01-18 |
 | 2. Core RSVP Engine | 2/2 | Complete | 2025-01-18 |
-| 3. PDF Integration | 0/3 | Not started | - |
-| 4. Controls & Polish | 0/TBD | Not started | - |
+| 3. PDF Integration | 4/4 | Complete | 2025-01-18 |
+| 4. Controls & Polish | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2025-01-18*
 *Depth: Quick (4 phases)*
 *Coverage: 29/29 v1 requirements mapped*
+*Last updated: 2026-01-18 (Phase 4 planning complete)*
