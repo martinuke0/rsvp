@@ -5,11 +5,15 @@ import { RSVPDisplay } from '@/components/reader/RSVPDisplay';
 import { RSVPControls } from '@/components/reader/RSVPControls';
 import { SettingsPanel } from '@/components/reader/SettingsPanel';
 import PDFUpload from '@/components/pdf/PDFUpload';
+import { TOCNavigation } from '@/components/pdf/TOCNavigation';
+import { PageRangeSelector } from '@/components/pdf/PageRangeSelector';
 import { useReadingStore } from '@/store/reading-store';
 import { useSettingsStore } from '@/store/settings-store';
 import { useDocumentStore } from '@/store/document-store';
 import { usePDFExtraction } from '@/hooks/use-pdf-extraction';
 import { groupWords } from '@/lib/rsvp/word-grouper';
+import { extractSectionText } from '@/lib/pdf/section-extractor';
+import type { TOCItem } from '@/types/pdf-worker';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -21,6 +25,7 @@ const SAMPLE_TEXT = `Rapid Serial Visual Presentation (RSVP) is a technique for 
 
 export default function Home() {
   const [text, setText] = useState(SAMPLE_TEXT);
+  const [view, setView] = useState<'upload' | 'navigation' | 'reading'>('upload');
   const initialize = useReadingStore((state) => state.initialize);
   const reset = useReadingStore((state) => state.reset);
   const wordsPerGroup = useSettingsStore((state) => state.wordsPerGroup);
@@ -43,11 +48,84 @@ export default function Home() {
 
   /**
    * Handle PDF upload completion
-   * Stores document data and initializes RSVP reading
+   * After extraction, show navigation view
    */
   const handlePDFUpload = useCallback(async (file: File) => {
     await extractPDF(file, wordsPerGroup);
+    // After extraction completes, show navigation view
+    setView('navigation');
   }, [extractPDF, wordsPerGroup]);
+
+  /**
+   * Handle TOC item selection
+   * Extracts section text and initializes RSVP
+   */
+  const handleTOCSelect = useCallback((item: TOCItem) => {
+    const doc = useDocumentStore.getState();
+    const outline = doc.outline;
+
+    // Find next TOC item to determine section end page
+    const currentIndex = outline.indexOf(item);
+    const nextItem = outline[currentIndex + 1];
+    const endPage = nextItem ? nextItem.pageIndex : doc.pageCount;
+
+    // Extract section text (pageIndex is 0-based, need 1-based for extraction)
+    const sectionText = extractSectionText(
+      doc.text,
+      item.pageIndex + 1,
+      endPage,
+      doc.pageCount
+    );
+
+    // Group words and initialize RSVP
+    const groupedWords = groupWords(sectionText, wordsPerGroup);
+    initialize(groupedWords);
+
+    // Store section info
+    doc.setSection(item.pageIndex + 1, endPage);
+
+    // Switch to reading view
+    setView('reading');
+  }, [wordsPerGroup, initialize]);
+
+  /**
+   * Handle page range selection
+   * Extracts page range text and initializes RSVP
+   */
+  const handleRangeSelect = useCallback((start: number, end: number) => {
+    const doc = useDocumentStore.getState();
+
+    // Extract section text
+    const sectionText = extractSectionText(doc.text, start, end, doc.pageCount);
+
+    // Group words and initialize RSVP
+    const groupedWords = groupWords(sectionText, wordsPerGroup);
+    initialize(groupedWords);
+
+    // Store section info
+    doc.setSection(start, end);
+
+    // Switch to reading view
+    setView('reading');
+  }, [wordsPerGroup, initialize]);
+
+  /**
+   * Handle full document reading
+   * Loads entire document for RSVP
+   */
+  const handleFullDocument = useCallback(() => {
+    const doc = useDocumentStore.getState();
+
+    // Group words and initialize RSVP
+    const groupedWords = groupWords(doc.text, wordsPerGroup);
+    initialize(groupedWords);
+
+    // Store section info (full document)
+    doc.setSection(1, doc.pageCount);
+
+    // Switch to reading view
+    setView('reading');
+  }, [wordsPerGroup, initialize]);
 
   // Auto-load sample text on mount
   useEffect(() => {
@@ -67,86 +145,152 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Main reading interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left column: RSVP Display and Controls */}
-          <div className="lg:col-span-2 space-y-6">
-            <RSVPDisplay />
-            <div className="flex justify-center">
-              <RSVPControls />
+        {/* View: Reading interface */}
+        {view === 'reading' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left column: RSVP Display and Controls */}
+            <div className="lg:col-span-2 space-y-6">
+              <RSVPDisplay />
+              <div className="flex justify-center">
+                <RSVPControls />
+              </div>
+            </div>
+
+            {/* Right column: Settings */}
+            <div>
+              <SettingsPanel />
             </div>
           </div>
+        )}
 
-          {/* Right column: Settings */}
-          <div>
-            <SettingsPanel />
-          </div>
-        </div>
+        {/* View: Navigation (after PDF upload) */}
+        {view === 'navigation' && (
+          <div className="space-y-6">
+            {/* Document info */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Document Loaded</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {useDocumentStore.getState().filename} • {useDocumentStore.getState().pageCount} pages
+                </p>
+              </CardContent>
+            </Card>
 
-        {/* Input section: PDF upload and manual text */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Load Content</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* PDF upload section */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold">Upload PDF</h3>
+            {/* Navigation options */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* TOC Navigation */}
+              <TOCNavigation onSectionSelect={handleTOCSelect} />
 
-              {/* Error display */}
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              {/* Loading state */}
-              {isExtracting ? (
-                <div className="space-y-2">
-                  <Progress value={progress} />
-                  <p className="text-sm text-muted-foreground text-center">
-                    Extracting text... {Math.round(progress)}%
-                  </p>
-                </div>
-              ) : (
-                <PDFUpload
-                  onFileSelected={handlePDFUpload}
+              {/* Page Range Selector */}
+              <div className="space-y-6">
+                <PageRangeSelector
+                  pageCount={useDocumentStore.getState().pageCount}
+                  onRangeSelect={handleRangeSelect}
                 />
-              )}
+
+                {/* Full document option */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Full Document</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button onClick={handleFullDocument} className="w-full">
+                      Start Reading Full Document
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* View: Upload (default) */}
+        {view === 'upload' && (
+          <>
+            {/* Main reading interface (with sample text) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left column: RSVP Display and Controls */}
+              <div className="lg:col-span-2 space-y-6">
+                <RSVPDisplay />
+                <div className="flex justify-center">
+                  <RSVPControls />
+                </div>
+              </div>
+
+              {/* Right column: Settings */}
+              <div>
+                <SettingsPanel />
+              </div>
             </div>
 
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or paste text manually
-                </span>
-              </div>
-            </div>
+            {/* Input section: PDF upload and manual text */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Load Content</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* PDF upload section */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold">Upload PDF</h3>
 
-            {/* Manual text input section */}
-            <div className="space-y-4">
-              <Textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Paste your text here..."
-                className="min-h-[150px] font-mono text-sm"
-              />
-              <div className="flex gap-2">
-                <Button onClick={handleLoadText}>
-                  Load Text
-                </Button>
-                <Button onClick={handleReset} variant="outline">
-                  Reset to Sample
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                  {/* Error display */}
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  {/* Loading state */}
+                  {isExtracting ? (
+                    <div className="space-y-2">
+                      <Progress value={progress} />
+                      <p className="text-sm text-muted-foreground text-center">
+                        Extracting text... {Math.round(progress)}%
+                      </p>
+                    </div>
+                  ) : (
+                    <PDFUpload
+                      onFileSelected={handlePDFUpload}
+                    />
+                  )}
+                </div>
+
+                {/* Divider */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or paste text manually
+                    </span>
+                  </div>
+                </div>
+
+                {/* Manual text input section */}
+                <div className="space-y-4">
+                  <Textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Paste your text here..."
+                    className="min-h-[150px] font-mono text-sm"
+                  />
+                  <div className="flex gap-2">
+                    <Button onClick={handleLoadText}>
+                      Load Text
+                    </Button>
+                    <Button onClick={handleReset} variant="outline">
+                      Reset to Sample
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
     </main>
   );
