@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Project Foundation** - Next.js setup, shadcn UI, deployment pipeline
 - [x] **Phase 2: Core RSVP Engine** - Timing loop, focal point, word grouping, speed control
 - [x] **Phase 3: PDF Integration** - Upload, text extraction, TOC navigation, Web Worker architecture
-- [ ] **Phase 4: Controls & Polish** - Reading controls, settings persistence, keyboard shortcuts, progress tracking
+- [x] **Phase 4: Controls & Polish** - Reading controls, settings persistence, keyboard shortcuts, progress tracking
 
 ## Phase Details
 
@@ -106,8 +106,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Keyboard shortcuts (Space/Escape/R), restart button
-- [ ] 04-02-PLAN.md — Position persistence, progress bar with time estimate
+- [x] 04-01-PLAN.md — Keyboard shortcuts (Space/Escape/R), restart button
+- [x] 04-02-PLAN.md — Position persistence, progress bar with time estimate
 
 ---
 
@@ -121,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Project Foundation | 2/2 | Complete | 2025-01-18 |
 | 2. Core RSVP Engine | 2/2 | Complete | 2025-01-18 |
 | 3. PDF Integration | 4/4 | Complete | 2025-01-18 |
-| 4. Controls & Polish | 0/2 | Not started | - |
+| 4. Controls & Polish | 2/2 | Complete | 2025-01-18 |
 
 ---
 *Roadmap created: 2025-01-18*

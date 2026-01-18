@@ -104,7 +104,7 @@ export function RSVPControls() {
       {/* Keyboard shortcuts hint */}
       {totalWords > 0 && (
         <div className="text-xs text-muted-foreground">
-          Shortcuts: Space = Play/Pause, R = Restart, Esc = Back
+          Shortcuts: Space = Play/Pause, R = Restart, Esc = Back, ↑/↓ = WPM
         </div>
       )}
     </div>

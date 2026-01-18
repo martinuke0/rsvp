@@ -29,18 +29,18 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Reading Controls
 
-- [ ] **CTRL-01**: User can pause reading
-- [ ] **CTRL-02**: User can resume reading from pause point
-- [ ] **CTRL-03**: User can restart current section from beginning
-- [ ] **CTRL-04**: User can control reading with keyboard shortcuts (Space = play/pause, Escape = back to navigation, R = restart)
-- [ ] **CTRL-05**: System persists reading position across browser sessions
-- [ ] **CTRL-06**: System displays progress bar showing position in current section
+- [x] **CTRL-01**: User can pause reading
+- [x] **CTRL-02**: User can resume reading from pause point
+- [x] **CTRL-03**: User can restart current section from beginning
+- [x] **CTRL-04**: User can control reading with keyboard shortcuts (Space = play/pause, Escape = back to navigation, R = restart)
+- [x] **CTRL-05**: System persists reading position across browser sessions
+- [x] **CTRL-06**: System displays progress bar showing position in current section
 
 ### Settings & UI
 
 - [x] **UI-01**: System provides settings panel for reading preferences
 - [x] **UI-02**: System uses minimalist, modern design with shadcn components
-- [ ] **UI-03**: System persists user settings (WPM, word grouping) across browser sessions
+- [x] **UI-03**: System persists user settings (WPM, word grouping) across browser sessions
 - [x] **UI-04**: User can preview document structure before reading
 
 ### Performance
@@ -116,15 +116,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RSVP-06 | Phase 2 | Complete |
 | RSVP-07 | Phase 2 | Complete |
 | RSVP-08 | Phase 2 | Complete |
-| CTRL-01 | Phase 4 | Pending |
-| CTRL-02 | Phase 4 | Pending |
-| CTRL-03 | Phase 4 | Pending |
-| CTRL-04 | Phase 4 | Pending |
-| CTRL-05 | Phase 4 | Pending |
-| CTRL-06 | Phase 4 | Pending |
+| CTRL-01 | Phase 4 | Complete |
+| CTRL-02 | Phase 4 | Complete |
+| CTRL-03 | Phase 4 | Complete |
+| CTRL-04 | Phase 4 | Complete |
+| CTRL-05 | Phase 4 | Complete |
+| CTRL-06 | Phase 4 | Complete |
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 1 | Complete |
-| UI-03 | Phase 2 | Complete (via settings-store persist middleware) |
+| UI-03 | Phase 4 | Complete (verified in 04-02) |
 | UI-04 | Phase 3 | Complete |
 | PERF-01 | Phase 3 | Complete |
 | PERF-02 | Phase 3 | Complete |

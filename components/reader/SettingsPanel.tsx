@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/store/settings-store';
 import { useDebounce } from 'use-debounce';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
 import {
   Card,
   CardContent,
@@ -44,11 +45,26 @@ export function SettingsPanel() {
       <CardContent className="space-y-6">
         {/* WPM Control */}
         <div className="space-y-2">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center gap-2">
             <Label htmlFor="wpm-slider">Reading Speed</Label>
-            <span className="text-sm text-muted-foreground">
-              {wpm} WPM
-            </span>
+            <div className="flex items-center gap-1">
+              <Input
+                type="number"
+                min={100}
+                max={1000}
+                step={50}
+                value={wpm}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value) && value >= 100 && value <= 1000) {
+                    setWPM(value);
+                  }
+                }}
+                onFocus={(e) => e.target.select()}
+                className="w-20 h-8 text-sm text-right"
+              />
+              <span className="text-sm text-muted-foreground">WPM</span>
+            </div>
           </div>
           <Slider
             id="wpm-slider"
@@ -60,7 +76,7 @@ export function SettingsPanel() {
             className="w-full"
           />
           <p className="text-xs text-muted-foreground">
-            Recommended: 250-400 WPM for comfortable reading
+            Recommended: 250-400 WPM for comfortable reading. Use ↑/↓ arrows to adjust.
           </p>
         </div>
 

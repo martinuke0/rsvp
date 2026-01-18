@@ -221,6 +221,22 @@ export default function Home() {
           e.preventDefault();
           handleRestart();
           break;
+
+        case 'ArrowUp':
+          // Arrow Up: increase WPM by 50
+          e.preventDefault();
+          const currentWPM = useSettingsStore.getState().wpm;
+          const newWPM = Math.min(currentWPM + 50, 1000); // Max 1000
+          useSettingsStore.getState().setWPM(newWPM);
+          break;
+
+        case 'ArrowDown':
+          // Arrow Down: decrease WPM by 50
+          e.preventDefault();
+          const currentWPMDown = useSettingsStore.getState().wpm;
+          const newWPMDown = Math.max(currentWPMDown - 50, 100); // Min 100
+          useSettingsStore.getState().setWPM(newWPMDown);
+          break;
       }
     };
 
@@ -267,7 +283,7 @@ export default function Home() {
             RSVP Speed Reader
           </h1>
           <p className="text-muted-foreground">
-            Read faster with precision focal point guidance
+            Read faster with precision.
           </p>
         </div>
 
