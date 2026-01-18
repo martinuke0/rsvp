@@ -13,6 +13,7 @@
 
 import * as pdfjsLib from 'pdfjs-dist'
 import type { WorkerRequest, WorkerResponse, PDFExtractionResult } from '@/types/pdf-worker'
+import { extractTableOfContents } from './toc-heuristics'
 
 // Configure PDF.js to use its internal worker
 // Worker file must be in public folder and served from root path
@@ -45,6 +46,9 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       // Get total page count
       const pageCount = pdf.numPages
 
+      // Extract TOC (runs in worker to keep main thread responsive)
+      const outline = await extractTableOfContents(pdf)
+
       // Extract text from all pages with memory-efficient lazy loading
       let fullText = ''
 
@@ -76,7 +80,7 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       // Send full result back to main thread
       const result: PDFExtractionResult = {
         text: fullText,
-        outline: [], // Empty for now - TOC extraction in Plan 03-03
+        outline,
         pageCount,
         filename
       }
