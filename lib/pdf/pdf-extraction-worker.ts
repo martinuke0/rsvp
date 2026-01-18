@@ -42,20 +42,40 @@ self.onmessage = async (e: MessageEvent<WorkerRequest>) => {
       const loadingTask = pdfjsLib.getDocument({ data: buffer })
       const pdf = await loadingTask.promise
 
-      // For Plan 03-01: Extract ONLY page count
-      // Full text extraction with lazy page loading will be implemented in Plan 03-02
+      // Get total page count
       const pageCount = pdf.numPages
 
-      // Report progress immediately after loading (100% for this minimal extraction)
-      const progressResponse: WorkerResponse = {
-        type: 'progress',
-        progress: 100
-      }
-      self.postMessage(progressResponse)
+      // Extract text from all pages with memory-efficient lazy loading
+      let fullText = ''
 
-      // Send minimal result back to main thread
+      for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+        // Load page
+        const page = await pdf.getPage(pageNum)
+
+        // Extract text content
+        const textContent = await page.getTextContent()
+
+        // Combine text items with spaces
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ')
+
+        fullText += pageText + '\n'
+
+        // CRITICAL: Release page memory immediately
+        page.cleanup()
+
+        // Report progress (pageNum / totalPages * 100)
+        const progressResponse: WorkerResponse = {
+          type: 'progress',
+          progress: (pageNum / pageCount) * 100
+        }
+        self.postMessage(progressResponse)
+      }
+
+      // Send full result back to main thread
       const result: PDFExtractionResult = {
-        text: '', // Empty for now - will be populated in Plan 03-02
+        text: fullText,
         outline: [], // Empty for now - TOC extraction in Plan 03-03
         pageCount,
         filename
