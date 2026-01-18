@@ -6,23 +6,23 @@ See: .planning/PROJECT.md (updated 2025-01-18)
 
 **Core value:** Effective speed reading through precise focal point guidance - the center letter highlight combined with customizable word grouping and speed control enables readers to maintain focus and comprehension at accelerated reading speeds.
 
-**Current focus:** Phase 3 - PDF Integration
+**Current focus:** Phase 4 - Controls & Polish
 
 ## Current Position
 
-Phase: 3 of 4 (PDF Integration)
-Plan: 4 of 4 complete
-Status: Phase complete
-Last activity: 2026-01-18 — Completed 03-04-PLAN.md (Navigation UI)
+Phase: 4 of 4 (Controls & Polish)
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-18 — Completed 04-01-PLAN.md (Keyboard Shortcuts & Restart)
 
-Progress: [████████░░] 80%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 3.25 min
-- Total execution time: 0.43 hours
+- Total plans completed: 9
+- Average duration: 2.78 min
+- Total execution time: 0.42 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [████████░░] 80%
 | 01-project-foundation | 2/2 | 10 min | 5 min |
 | 02-core-rsvp-engine | 2/2 | 9 min | 4.5 min |
 | 03-pdf-integration | 4/4 | 11 min | 2.75 min |
+| 04-controls-and-polish | 1/2 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (3m), 03-02 (3m), 03-03 (2m), 03-04 (3m)
-- Trend: Accelerating velocity, Phase 3 average 2.75 minutes per plan
+- Last 5 plans: 03-02 (3m), 03-03 (2m), 03-04 (3m), 04-01 (1m)
+- Trend: Peak efficiency, Phase 4 Plan 1 completed in 1 minute
 
 *Updated after each plan completion*
 
@@ -81,6 +82,10 @@ Recent decisions affecting current work:
 - Navigation handlers use getState() for one-time reads (no subscriptions needed) (03-04)
 - TOC end page calculated from next item in outline array (natural section boundaries) (03-04)
 - Full document reading preserved alongside section selection for flexibility (03-04)
+- Space key with preventDefault() stops page scroll for hands-free reading (04-01)
+- Input field guard prevents shortcuts while typing (instanceof checks) (04-01)
+- Event listener cleanup in useEffect return prevents memory leak (04-01)
+- Escape only returns to navigation when view === 'reading' (04-01)
 
 ### Pending Todos
 
@@ -94,10 +99,13 @@ None yet.
 - ✓ TOC extraction with dual-strategy approach completed in 03-03 (structured outline + font heuristics)
 - ✓ Navigation UI completed in 03-04 (TOC hierarchy, page range selector, back navigation)
 
+**Phase 4 (Controls & Polish):**
+- ✓ Keyboard shortcuts (Space, Escape, R) with restart button implemented in 04-01 (hands-free control complete)
+
 ## Session Continuity
 
 Last session: 2026-01-18 (plan execution)
-Stopped at: Completed 03-04-PLAN.md - Navigation UI
+Stopped at: Completed 04-01-PLAN.md - Keyboard Shortcuts & Restart
 Resume file: None
 
 **Phase 1 Complete:** Foundation established with Next.js 16, shadcn/ui, PDF.js worker configuration, and Vercel deployment.
@@ -105,3 +113,5 @@ Resume file: None
 **Phase 2 Complete:** Core RSVP engine with RAF timing, ORP calculator, word grouping, Zustand stores, and complete UI (display with ORP highlighting, play/pause controls, WPM/grouping sliders). Working RSVP reader with sample text and custom text input.
 
 **Phase 3 Complete:** PDF Integration fully operational with Web Worker architecture, lazy page loading, full text extraction, TOC extraction (structured + font heuristics), document store with section management, hierarchical navigation UI (TOC + page range selector), back navigation preserving state, and complete RSVP integration. End-to-end flow: PDF upload → navigation (TOC or page range) → section reading → back to navigation → different section. Manual text input flow preserved alongside PDF workflow.
+
+**Phase 4 In Progress:** Keyboard shortcuts (Space, Escape, R) and restart button complete. Next: Position persistence and progress tracking (04-02).
