@@ -2,7 +2,7 @@
 
 import { useReadingStore } from '@/store/reading-store';
 import { Button } from '@/components/ui/button';
-import { Play, Pause } from 'lucide-react';
+import { Play, Pause, RotateCcw } from 'lucide-react';
 
 /**
  * RSVP Controls Component.
@@ -23,6 +23,19 @@ export function RSVPControls() {
 
   const handleToggle = () => {
     setIsPlaying(!isPlaying);
+  };
+
+  const handleRestart = () => {
+    // Stop playback
+    setIsPlaying(false);
+
+    // Get words array
+    const words = useReadingStore.getState().words;
+
+    // Reset to first word
+    if (words.length > 0) {
+      useReadingStore.getState().setCurrentWord(words[0], 0);
+    }
   };
 
   const progress = totalWords > 0
@@ -51,10 +64,28 @@ export function RSVPControls() {
         )}
       </Button>
 
+      {/* Restart Button */}
+      <Button
+        onClick={handleRestart}
+        variant="outline"
+        size="sm"
+        disabled={totalWords === 0}
+      >
+        <RotateCcw className="mr-2 h-4 w-4" />
+        Restart Section
+      </Button>
+
       {/* Progress indicator */}
       {totalWords > 0 && (
         <div className="text-sm text-muted-foreground">
           Word {currentIndex + 1} of {totalWords} ({progress}%)
+        </div>
+      )}
+
+      {/* Keyboard shortcuts hint */}
+      {totalWords > 0 && (
+        <div className="text-xs text-muted-foreground">
+          Shortcuts: Space = Play/Pause, R = Restart, Esc = Back
         </div>
       )}
     </div>
