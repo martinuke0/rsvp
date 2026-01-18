@@ -143,6 +143,67 @@ export default function Home() {
     }
   }, []);
 
+  /**
+   * Handle restart
+   * Resets reading to first word and stops playback
+   */
+  const handleRestart = useCallback(() => {
+    // Stop playback
+    useReadingStore.getState().setIsPlaying(false);
+
+    // Get words array
+    const words = useReadingStore.getState().words;
+
+    // Reset to first word
+    if (words.length > 0) {
+      useReadingStore.getState().setCurrentWord(words[0], 0);
+    }
+  }, []);
+
+  /**
+   * Global keyboard shortcut handler
+   * Space: toggle play/pause
+   * Escape: back to navigation
+   * R: restart section
+   */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Guard: Do not trigger shortcuts when typing in input fields
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (e.key) {
+        case ' ':
+          // Space: toggle play/pause
+          e.preventDefault(); // Prevent page scroll
+          const isPlaying = useReadingStore.getState().isPlaying;
+          useReadingStore.getState().setIsPlaying(!isPlaying);
+          break;
+
+        case 'Escape':
+          // Escape: back to navigation (only in reading view)
+          e.preventDefault();
+          if (view === 'reading') {
+            handleBackToNavigation();
+          }
+          break;
+
+        case 'r':
+        case 'R':
+          // R: restart section
+          e.preventDefault();
+          handleRestart();
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup function prevents memory leak
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [view, handleBackToNavigation, handleRestart]);
+
   // Auto-load sample text on mount
   useEffect(() => {
     handleLoadText();
